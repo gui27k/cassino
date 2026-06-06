@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Royal Vegas Casino</title>
+
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="14" fill="%23030712"/>
+<text x="50%" y="58%" text-anchor="middle" font-size="42" fill="%23fbbf24">♠</text>
+</svg>'>
+
+<style>
+
+:root{
+  --bg:#030712;
+  --panel:#111827;
+  --gold:#fbbf24;
+  --gold-dark:#d97706;
+  --green:#166534;
+  --green-dark:#14532d;
+  --cyan:#22d3ee;
+  --red:#ef4444;
+  --white:#f8fafc;
+  --muted:#94a3b8;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Inter,Arial,sans-serif;
+}
+
+body{
+  background:
+    radial-gradient(circle at top left, rgba(34,211,238,.08), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(251,191,36,.08), transparent 20%),
+    var(--bg);
+  color:white;
+  min-height:100vh;
+  overflow:hidden;
+}
+
+.app{
+  display:flex;
+  height:100vh;
+}
+
+.sidebar{
+  width:320px;
+  background:#0f172a;
+  border-right:1px solid rgba(255,255,255,.06);
+  padding:24px;
+  overflow:auto;
+}
+
+.logo{
+  font-size:42px;
+  font-weight:900;
+  background:linear-gradient(90deg,var(--gold),#fff6c7);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.logo span{
+  -webkit-text-fill-color:var(--cyan);
+}
+
+.balance{
+  margin-top:28px;
+  padding:24px;
+  border-radius:26px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.balance small{
+  display:block;
+  color:var(--muted);
+}
+
+.balance strong{
+  display:block;
+  margin-top:10px;
+  font-size:44px;
+  color:var(--gold);
+}
+
+.menu{
+  margin-top:28px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.game-btn{
+  border:none;
+  border-radius:18px;
+  padding:18px;
+  text-align:left;
+  background:rgba(255,255,255,.05);
+  color:white;
+  cursor:pointer;
+  transition:.2s;
+  font-size:16px;
+  font-weight:800;
+}
+
+.game-btn:hover{
+  transform:translateX(4px);
+}
+
+.game-btn.active{
+  border:1px solid rgba(251,191,36,.4);
+  background:rgba(251,191,36,.08);
+}
+
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  height:90px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:0 30px;
+}
+
+.title{
+  font-size:34px;
+  font-weight:900;
+}
+
+.title span{
+  color:var(--gold);
+}
+
+.content{
+  flex:1;
+  overflow:auto;
+  padding:28px;
+}
+
+.table{
+  min-height:100%;
+  border-radius:38px;
+  padding:30px;
+  background:
+    radial-gradient(circle at center, rgba(255,255,255,.03), transparent 60%),
+    linear-gradient(180deg,var(--green-dark),var(--green));
+}
+
+.screen{
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
+
+.section-title{
+  font-size:42px;
+  font-weight:900;
+}
+
+.section-sub{
+  margin-top:8px;
+  color:var(--muted);
+}
+
+.bet-panel{
+  margin-top:24px;
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.input{
+  height:56px;
+  border:none;
+  border-radius:16px;
+  padding:0 16px;
+  background:rgba(255,255,255,.08);
+  color:white;
+  font-size:16px;
+  outline:none;
+}
+
+.btn{
+  border:none;
+  border-radius:16px;
+  padding:16px 24px;
+  cursor:pointer;
+  color:white;
+  font-weight:900;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+}
+
+.primary{
+  background:linear-gradient(135deg,#06b6d4,#2563eb);
+}
+
+.success{
+  background:linear-gradient(135deg,#22c55e,#15803d);
+}
+
+.gold{
+  background:linear-gradient(135deg,#fbbf24,#d97706);
+}
+
+.danger{
+  background:linear-gradient(135deg,#ef4444,#b91c1c);
+}
+
+.message{
+  margin-top:24px;
+  text-align:center;
+  font-size:32px;
+  font-weight:900;
+  min-height:40px;
+}
+
+/* CARDS */
+
+.cards{
+  display:flex;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.card{
+  width:110px;
+  height:160px;
+  background:white;
+  color:black;
+  border-radius:18px;
+  padding:12px;
+  position:relative;
+  box-shadow:0 15px 30px rgba(0,0,0,.35);
+}
+
+.card.red{
+  color:#dc2626;
+}
+
+.card-value{
+  font-size:28px;
+  font-weight:900;
+}
+
+.card-suit{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:58px;
+}
+
+/* SLOTS */
+
+.slot-grid{
+  display:grid;
+  grid-template-columns:repeat(3,120px);
+  gap:14px;
+  justify-content:center;
+  margin-top:26px;
+}
+
+.slot{
+  width:120px;
+  height:120px;
+  border-radius:22px;
+  background:rgba(255,255,255,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:56px;
+  box-shadow:0 10px 24px rgba(0,0,0,.3);
+}
+
+/* ROULETTE */
+
+.roulette-wrap{
+  width:360px;
+  margin:40px auto;
+  position:relative;
+}
+
+.pointer{
+  position:absolute;
+  top:-36px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:42px;
+  z-index:10;
+}
+
+.wheel{
+  width:360px;
+  height:360px;
+  border-radius:50%;
+  border:12px solid var(--gold-dark);
+  transition:4s cubic-bezier(.15,.9,.15,1);
+
+  background:
+    conic-gradient(
+      #dc2626 0deg 30deg,
+      #111827 30deg 60deg,
+      #dc2626 60deg 90deg,
+      #111827 90deg 120deg,
+      #22c55e 120deg 150deg,
+      #dc2626 150deg 180deg,
+      #111827 180deg 210deg,
+      #dc2626 210deg 240deg,
+      #111827 240deg 270deg,
+      #dc2626 270deg 300deg,
+      #111827 300deg 330deg,
+      #dc2626 330deg 360deg
+    );
+}
+
+/* MINES */
+
+.mines-grid{
+  display:grid;
+  grid-template-columns:repeat(5,82px);
+  gap:12px;
+  justify-content:center;
+  margin-top:24px;
+}
+
+.mine{
+  width:82px;
+  height:82px;
+  border:none;
+  border-radius:18px;
+  background:rgba(255,255,255,.08);
+  color:white;
+  font-size:32px;
+  cursor:pointer;
+}
+
+/* CRASH */
+
+.crash-box{
+  margin-top:30px;
+  height:320px;
+  border-radius:30px;
+  background:rgba(255,255,255,.05);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.plane{
+  font-size:70px;
+  animation:fly 1s infinite alternate;
+}
+
+@keyframes fly{
+  from{
+    transform:translateX(-12px);
+  }
+  to{
+    transform:translateX(12px);
+  }
+}
+
+.multiplier{
+  margin-top:18px;
+  font-size:82px;
+  font-weight:900;
+  color:var(--gold);
+}
+
+@media(max-width:1100px){
+
+  .app{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+  }
+
+  .roulette-wrap{
+    width:260px;
+  }
+
+  .wheel{
+    width:260px;
+    height:260px;
+  }
+
+  .slot-grid{
+    grid-template-columns:repeat(3,82px);
+  }
+
+  .slot{
+    width:82px;
+    height:82px;
+    font-size:40px;
+  }
+
+  .mines-grid{
+    grid-template-columns:repeat(5,60px);
+  }
+
+  .mine{
+    width:60px;
+    height:60px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      ROYAL <span>VEGAS</span>
+    </div>
+
+    <div class="balance">
+      <small>SALDO</small>
+      <strong id="balance">$5000</strong>
+    </div>
+
+    <div class="menu">
+
+      <button class="game-btn active" data-game="blackjack">
+        ♠ Blackjack
+      </button>
+
+      <button class="game-btn" data-game="slots">
+        🎰 Slots
+      </button>
+
+      <button class="game-btn" data-game="roulette">
+        🎡 Roulette
+      </button>
+
+      <button class="game-btn" data-game="mines">
+        💣 Mines
+      </button>
+
+      <button class="game-btn" data-game="crash">
+        ✈️ Aviator
+      </button>
+
+    </div>
+
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div class="title">
+        Royal <span>Vegas</span>
+      </div>
+
+      <div style="font-size:20px;font-weight:900;">
+        Vitórias:
+        <span id="wins">0</span>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="table">
+
+        <!-- BLACKJACK -->
+        <section class="screen active" id="blackjack">
+
+          <div class="section-title">
+            ♠ Blackjack
+          </div>
+
+          <div class="section-sub">
+            Chegue o mais próximo de 21 sem ultrapassar.
+          </div>
+
+          <div class="bet-panel">
+
+            <input type="number" class="input" id="bjBet" value="100">
+
+            <button class="btn success" id="bjStart">
+              Iniciar
+            </button>
+
+            <button class="btn primary" id="bjHit">
+              Comprar
+            </button>
+
+            <button class="btn gold" id="bjStand">
+              Parar
+            </button>
+
+          </div>
+
+          <h2 style="margin-top:24px;">Dealer</h2>
+          <div class="cards" id="dealerCards"></div>
+
+          <h2 style="margin-top:24px;">Você</h2>
+          <div class="cards" id="playerCards"></div>
+
+          <div class="message" id="bjMessage"></div>
+
+        </section>
+
+        <!-- SLOTS -->
+        <section class="screen" id="slots">
+
+          <div class="section-title">
+            🎰 Slots 3x3
+          </div>
+
+          <div class="section-sub">
+            Acerte linhas iguais para ganhar.
+          </div>
+
+          <div class="bet-panel">
+
+            <input type="number" class="input" id="slotsBet" value="100">
+
+            <button class="btn danger" id="spinBtn">
+              GIRAR
+            </button>
+
+          </div>
+
+          <div class="slot-grid" id="slotGrid"></div>
+
+          <div class="message" id="slotMessage"></div>
+
+        </section>
+
+        <!-- ROULETTE -->
+        <section class="screen" id="roulette">
+
+          <div class="section-title">
+            🎡 Roulette
+          </div>
+
+          <div class="section-sub">
+            A seta define a cor vencedora.
+          </div>
+
+          <div class="bet-panel">
+
+            <input type="number" class="input" id="rouletteBet" value="100">
+
+            <button class="btn danger" id="redBtn">
+              Vermelho
+            </button>
+
+            <button class="btn primary" id="blackBtn">
+              Preto
+            </button>
+
+          </div>
+
+          <div class="roulette-wrap">
+
+            <div class="pointer">
+              ▼
+            </div>
+
+            <div class="wheel" id="wheel"></div>
+
+          </div>
+
+          <div class="message" id="rouletteMessage"></div>
+
+        </section>
+
+        <!-- MINES -->
+        <section class="screen" id="mines">
+
+          <div class="section-title">
+            💣 Mines
+          </div>
+
+          <div class="section-sub">
+            Continue pegando diamantes para aumentar o multiplicador.
+          </div>
+
+          <div class="bet-panel">
+
+            <input type="number" class="input" id="minesBet" value="100">
+
+            <select class="input" id="bombCount">
+              <option value="3">3 Bombas</option>
+              <option value="5">5 Bombas</option>
+              <option value="7">7 Bombas</option>
+              <option value="10">10 Bombas</option>
+            </select>
+
+            <button class="btn gold" id="startMines">
+              Iniciar
+            </button>
+
+            <button class="btn success" id="cashoutMines">
+              Sacar
+            </button>
+
+          </div>
+
+          <div class="mines-grid" id="minesGrid"></div>
+
+          <div class="message" id="minesMessage"></div>
+
+        </section>
+
+        <!-- CRASH -->
+        <section class="screen" id="crash">
+
+          <div class="section-title">
+            ✈️ Aviator
+          </div>
+
+          <div class="section-sub">
+            Saque antes do avião cair.
+          </div>
+
+          <div class="bet-panel">
+
+            <input type="number" class="input" id="crashBet" value="100">
+
+            <button class="btn success" id="startCrash">
+              Iniciar
+            </button>
+
+            <button class="btn gold" id="cashoutBtn">
+              Sacar
+            </button>
+
+          </div>
+
+          <div class="crash-box">
+
+            <div class="plane">
+              ✈️
+            </div>
+
+            <div class="multiplier" id="multiplier">
+              1.00x
+            </div>
+
+          </div>
+
+          <div class="message" id="crashMessage"></div>
+
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+(() => {
+
+  // ==========================
+  // GLOBAL
+  // ==========================
+
+  let balance = 5000;
+  let wins = 0;
+
+  const balanceEl =
+    document.getElementById("balance");
+
+  const winsEl =
+    document.getElementById("wins");
+
+  function updateStats(){
+
+    balanceEl.textContent =
+      `$${balance}`;
+
+    winsEl.textContent =
+      wins;
+  }
+
+  updateStats();
+
+  function getBet(id){
+
+    let value =
+      Number(
+        document.getElementById(id).value
+      );
+
+    if(isNaN(value) || value < 10)
+      value = 10;
+
+    if(value > balance)
+      value = balance;
+
+    return value;
+  }
+
+  // ==========================
+  // MENU
+  // ==========================
+
+  const buttons =
+    document.querySelectorAll(".game-btn");
+
+  const screens =
+    document.querySelectorAll(".screen");
+
+  buttons.forEach(btn => {
+
+    btn.onclick = () => {
+
+      buttons.forEach(b =>
+        b.classList.remove("active")
+      );
+
+      screens.forEach(s =>
+        s.classList.remove("active")
+      );
+
+      btn.classList.add("active");
+
+      document
+        .getElementById(btn.dataset.game)
+        .classList.add("active");
+    };
+  });
+
+  // ==========================
+  // BLACKJACK
+  // ==========================
+
+  const suits =
+    ["♠","♥","♦","♣"];
+
+  const values =
+    ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+
+  let deck = [];
+  let player = [];
+  let dealer = [];
+  let bjBet = 0;
+  let bjPlaying = false;
+
+  function createDeck(){
+
+    deck = [];
+
+    for(const suit of suits){
+
+      for(const value of values){
+
+        deck.push({
+          suit,
+          value
+        });
+      }
+    }
+
+    deck.sort(() => Math.random() - .5);
+  }
+
+  function drawCard(hand){
+
+    hand.push(deck.pop());
+  }
+
+  function cardValue(card){
+
+    if(["J","Q","K"].includes(card.value))
+      return 10;
+
+    if(card.value === "A")
+      return 11;
+
+    return Number(card.value);
+  }
+
+  function total(hand){
+
+    let sum = 0;
+    let aces = 0;
+
+    hand.forEach(card => {
+
+      sum += cardValue(card);
+
+      if(card.value === "A")
+        aces++;
+    });
+
+    while(sum > 21 && aces > 0){
+
+      sum -= 10;
+      aces--;
+    }
+
+    return sum;
+  }
+
+  function renderCards(){
+
+    dealerCards.innerHTML = "";
+    playerCards.innerHTML = "";
+
+    dealer.forEach(card => {
+
+      dealerCards.appendChild(
+        createCard(card)
+      );
+    });
+
+    player.forEach(card => {
+
+      playerCards.appendChild(
+        createCard(card)
+      );
+    });
+  }
+
+  function createCard(card){
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      `card ${
+        card.suit === "♥" ||
+        card.suit === "♦"
+        ? "red"
+        : ""
+      }`;
+
+    div.innerHTML = `
+      <div class="card-value">
+        ${card.value}${card.suit}
+      </div>
+
+      <div class="card-suit">
+        ${card.suit}
+      </div>
+    `;
+
+    return div;
+  }
+
+  bjStart.onclick = () => {
+
+    if(bjPlaying) return;
+
+    bjBet =
+      getBet("bjBet");
+
+    if(balance < bjBet) return;
+
+    balance -= bjBet;
+
+    createDeck();
+
+    player = [];
+    dealer = [];
+
+    drawCard(player);
+    drawCard(player);
+
+    drawCard(dealer);
+    drawCard(dealer);
+
+    renderCards();
+
+    bjMessage.textContent =
+      "Rodada iniciada";
+
+    bjPlaying = true;
+
+    updateStats();
+  };
+
+  bjHit.onclick = () => {
+
+    if(!bjPlaying) return;
+
+    drawCard(player);
+
+    renderCards();
+
+    if(total(player) > 21){
+
+      bjMessage.textContent =
+        "BUST! Você perdeu.";
+
+      bjPlaying = false;
+    }
+  };
+
+  bjStand.onclick = () => {
+
+    if(!bjPlaying) return;
+
+    while(total(dealer) < 17){
+
+      drawCard(dealer);
+    }
+
+    renderCards();
+
+    const playerTotal =
+      total(player);
+
+    const dealerTotal =
+      total(dealer);
+
+    if(
+      dealerTotal > 21 ||
+      playerTotal > dealerTotal
+    ){
+
+      const prize =
+        bjBet * 2;
+
+      balance += prize;
+
+      wins++;
+
+      bjMessage.textContent =
+        `GANHOU +$${prize}`;
+
+    }
+
+    else if(playerTotal === dealerTotal){
+
+      balance += bjBet;
+
+      bjMessage.textContent =
+        "EMPATE";
+    }
+
+    else{
+
+      bjMessage.textContent =
+        "DEALER VENCEU";
+    }
+
+    bjPlaying = false;
+
+    updateStats();
+  };
+
+  // ==========================
+  // SLOTS
+  // ==========================
+
+  const slotSymbols =
+    ["🍒","💎","7️⃣","⭐","🔥","🍋"];
+
+  function createSlots(){
+
+    slotGrid.innerHTML = "";
+
+    for(let i=0;i<9;i++){
+
+      const div =
+        document.createElement("div");
+
+      div.className = "slot";
+
+      div.textContent =
+        slotSymbols[
+          Math.floor(Math.random()*slotSymbols.length)
+        ];
+
+      slotGrid.appendChild(div);
+    }
+  }
+
+  createSlots();
+
+  spinBtn.onclick = () => {
+
+    const bet =
+      getBet("slotsBet");
+
+    if(balance < bet) return;
+
+    balance -= bet;
+
+    createSlots();
+
+    const slots =
+      [...document.querySelectorAll(".slot")]
+      .map(el => el.textContent);
+
+    const lines = [
+
+      [0,1,2],
+      [3,4,5],
+      [6,7,8],
+      [0,3,6],
+      [1,4,7],
+      [2,5,8],
+      [0,4,8],
+      [2,4,6]
+    ];
+
+    let won = false;
+
+    lines.forEach(line => {
+
+      const [a,b,c] = line;
+
+      if(
+        slots[a] === slots[b] &&
+        slots[b] === slots[c]
+      ){
+
+        won = true;
+      }
+    });
+
+    if(won){
+
+      const prize =
+        bet * 5;
+
+      balance += prize;
+
+      wins++;
+
+      slotMessage.textContent =
+        `JACKPOT +$${prize}`;
+
+    } else {
+
+      slotMessage.textContent =
+        `PERDEU -$${bet}`;
+    }
+
+    updateStats();
+  };
+
+  // ==========================
+  // ROULETTE
+  // ==========================
+
+  let rotation = 0;
+
+  function roulette(color){
+
+    const bet =
+      getBet("rouletteBet");
+
+    if(balance < bet) return;
+
+    balance -= bet;
+
+    const result =
+      Math.random() > .5
+      ? "red"
+      : "black";
+
+    let target = 0;
+
+    if(result === "red")
+      target = 15;
+
+    if(result === "black")
+      target = 45;
+
+    rotation +=
+      1800 + target;
+
+    wheel.style.transform =
+      `rotate(${rotation}deg)`;
+
+    setTimeout(()=>{
+
+      if(result === color){
+
+        const prize =
+          bet * 2;
+
+        balance += prize;
+
+        wins++;
+
+        rouletteMessage.textContent =
+          `GANHOU +$${prize}`;
+
+      } else {
+
+        rouletteMessage.textContent =
+          `CAIU ${result.toUpperCase()}`;
+      }
+
+      updateStats();
+
+    },4000);
+  }
+
+  redBtn.onclick =
+    () => roulette("red");
+
+  blackBtn.onclick =
+    () => roulette("black");
+
+  // ==========================
+  // MINES
+  // ==========================
+
+  let minesBombs = [];
+  let minesPlaying = false;
+  let minesBet = 0;
+  let minesMultiplier = 1;
+
+  function generateMines(){
+
+    minesGrid.innerHTML = "";
+
+    minesBombs = [];
+
+    const count =
+      Number(
+        bombCount.value
+      );
+
+    while(minesBombs.length < count){
+
+      const random =
+        Math.floor(Math.random()*25);
+
+      if(!minesBombs.includes(random))
+        minesBombs.push(random);
+    }
+
+    for(let i=0;i<25;i++){
+
+      const btn =
+        document.createElement("button");
+
+      btn.className = "mine";
+      btn.textContent = "?";
+
+btn.onclick = () => {
+
+  if(!minesPlaying) return;
+
+  if(btn.dataset.opened)
+    return;
+
+  btn.dataset.opened = "1";
+
+  // BOMBA
+  if(minesBombs.includes(i)){
+
+    btn.textContent = "💣";
+    btn.style.background = "#7f1d1d";
+
+    minesMessage.textContent =
+      "EXPLODIU";
+
+    minesPlaying = false;
+
+    // MOSTRAR TODAS AS BOMBAS
+    const allMines =
+      document.querySelectorAll(".mine");
+
+    allMines.forEach((mineBtn,index)=>{
+
+      if(minesBombs.includes(index)){
+
+        mineBtn.textContent = "💣";
+        mineBtn.style.background = "#7f1d1d";
+      }
+    });
+
+    return;
+  }
+
+  // DIAMANTE
+  btn.textContent = "💎";
+  btn.style.background = "#14532d";
+
+  minesMultiplier += 0.35;
+
+  minesMessage.textContent =
+    `Multiplicador ${minesMultiplier.toFixed(2)}x`;
+};
+
+      minesGrid.appendChild(btn);
+    }
+  }
+
+  startMines.onclick = () => {
+
+    if(minesPlaying) return;
+
+    minesBet =
+      getBet("minesBet");
+
+    if(balance < minesBet) return;
+
+    balance -= minesBet;
+
+    minesMultiplier = 1;
+
+    minesPlaying = true;
+
+    generateMines();
+
+    minesMessage.textContent =
+      "Partida iniciada";
+
+    updateStats();
+  };
+
+  cashoutMines.onclick = () => {
+
+    if(!minesPlaying) return;
+
+    const prize =
+      Math.floor(
+        minesBet * minesMultiplier
+      );
+
+    balance += prize;
+
+    wins++;
+
+    minesPlaying = false;
+
+    minesMessage.textContent =
+      `SACOU +$${prize}`;
+
+    updateStats();
+  };
+
+  // ==========================
+  // CRASH
+  // ==========================
+
+// SUBSTITUA TODO O BLOCO DO AVIATOR POR ESTE
+
+// ==========================
+// CRASH / AVIATOR
+// ==========================
+
+const multiplierEl =
+  document.getElementById("multiplier");
+
+const crashMessage =
+  document.getElementById("crashMessage");
+
+const startCrash =
+  document.getElementById("startCrash");
+
+const cashoutBtn =
+  document.getElementById("cashoutBtn");
+
+let crashRunning = false;
+let multiplier = 1;
+let crashInterval = null;
+let currentCrashBet = 0;
+let crashPoint = 0;
+
+startCrash.onclick = () => {
+
+  if(crashRunning) return;
+
+  currentCrashBet =
+    getBet("crashBet");
+
+  if(balance < currentCrashBet)
+    return;
+
+  balance -= currentCrashBet;
+
+  updateStats();
+
+  multiplier = 1;
+
+  multiplierEl.textContent =
+    "1.00x";
+
+  crashPoint =
+    Number(
+      (1 + Math.random() * 5).toFixed(2)
+    );
+
+  crashRunning = true;
+
+  crashMessage.textContent =
+    "VOANDO...";
+
+  clearInterval(crashInterval);
+
+  crashInterval = setInterval(() => {
+
+    multiplier += 0.02;
+
+    multiplierEl.textContent =
+      multiplier.toFixed(2) + "x";
+
+    if(multiplier >= crashPoint){
+
+      clearInterval(crashInterval);
+
+      crashRunning = false;
+
+      crashMessage.textContent =
+        `AVIÃO CAIU EM ${crashPoint.toFixed(2)}x`;
+    }
+
+  }, 60);
+};
+
+cashoutBtn.onclick = () => {
+
+  if(!crashRunning)
+    return;
+
+  clearInterval(crashInterval);
+
+  crashRunning = false;
+
+  const prize =
+    Math.floor(
+      currentCrashBet * multiplier
+    );
+
+  balance += prize;
+
+  wins++;
+
+  crashMessage.textContent =
+    `SACOU +$${prize}`;
+
+  updateStats();
+};
+})();
+</script>
+
+</body>
+</html>
